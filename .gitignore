@@ -1,0 +1,9 @@
+# Database file (local only)
+database/*.db
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+venv/
+.venv/
