@@ -1,5 +1,6 @@
-# Database file (local only)
+# Database files (local only)
 database/*.db
+.env
 
 # Python
 __pycache__/
