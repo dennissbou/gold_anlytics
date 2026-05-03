@@ -1,0 +1,508 @@
+{
+  "name": "master_analytic",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/economic-calendar",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "1a6d692f-5073-4f81-85fd-db8459faedd0",
+      "name": "economic-calendar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/news",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "2ac1104d-06fc-4258-8cd5-568e4c6fd5c8",
+      "name": "news",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "id": "d6dc8fac-1797-4a0f-b978-231bb99d70bd",
+      "name": "Mon–Fri 18:00 UTC",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1296,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/gold-prices-1d",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "bbdc15d0-8495-4938-a0f4-2634e92f797b",
+      "name": "gold-prices-1d",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        -128
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/gold-prices-1h",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "id": "557b8e21-e97d-4bcc-af0f-6cf4f6fdf811",
+      "name": "gold-prices-1h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/correlated-assets",
+        "options": {
+          "timeout": 180000
+        }
+      },
+      "id": "3bd9a4f7-4161-4792-b5d0-169f99ca6a51",
+      "name": "correlated-assets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/fed-rates",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "f4e20c67-dde5-4275-9127-69d738dd6bfb",
+      "name": "fed-rates",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        832
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/cot-report",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "cede90a5-18a3-43a7-a66b-9ba53ec876c6",
+      "name": "cot-report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/etf-flows",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "e6c5e4c6-e804-4936-a962-af76949ffc7a",
+      "name": "etf-flows",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        1248
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/central-bank",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "fe00f71b-dffb-48d0-976a-2cff04c56804",
+      "name": "central-bank",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/locale/fx-rates",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "5ce4b879-0a5e-4124-b4c0-8fd15e9eb41f",
+      "name": "locale-fx-rates",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        1632
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/locale/macro",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "740164d7-7655-4c81-b930-853151d7c946",
+      "name": "locale-macro",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -848,
+        1824
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 11,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -432,
+        528
+      ],
+      "id": "eae030ba-dfaa-4e5b-baa2-345afaf76b59",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/gifs/render/all",
+        "options": {
+          "timeout": 1200000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -224,
+        672
+      ],
+      "id": "47a1d6bd-e5bc-42c2-a902-064aa878b855",
+      "name": "GIFs generator"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/generate/article/locale?locale=cl",
+        "options": {
+          "timeout": 600000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -48,
+        672
+      ],
+      "id": "0ce215ec-7359-4388-9500-6e13c85a1b92",
+      "name": "article-cl"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/publish/website",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        176,
+        672
+      ],
+      "id": "4ca7b970-18c3-4b46-9452-4eec347c2224",
+      "name": "publish-website",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Mon–Fri 18:00 UTC": {
+      "main": [
+        [
+          {
+            "node": "gold-prices-1d",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "gold-prices-1h",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "economic-calendar",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "news",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "correlated-assets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "fed-rates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "cot-report",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "etf-flows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "central-bank",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "locale-fx-rates",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "locale-macro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gold-prices-1d": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gold-prices-1h": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "economic-calendar": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "news": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "correlated-assets": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "fed-rates": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "cot-report": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 6
+          }
+        ]
+      ]
+    },
+    "etf-flows": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 7
+          }
+        ]
+      ]
+    },
+    "central-bank": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 8
+          }
+        ]
+      ]
+    },
+    "locale-fx-rates": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 9
+          }
+        ]
+      ]
+    },
+    "locale-macro": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 10
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "GIFs generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GIFs generator": {
+      "main": [
+        [
+          {
+            "node": "article-cl",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "article-cl": {
+      "main": [
+        [
+          {
+            "node": "publish-website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "74850736-f2c2-4d80-a6ff-798744c9ebbc",
+  "meta": {
+    "instanceId": "abc8e493198af039150af22111aafd7cefb4c5271fb2a3454c3997c74feb62b5"
+  },
+  "id": "6BMQor8coDanm6Iw",
+  "tags": []
+}

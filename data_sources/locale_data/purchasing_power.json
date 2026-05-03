@@ -1,0 +1,59 @@
+{
+  "_note": "Monthly minimum wage in local currency. Update annually. Used by article generator to express gold price in purchasing power terms.",
+  "_as_of": "2026-01",
+  "en": {
+    "monthly_min_wage_local": 1256,
+    "currency": "USD",
+    "source": "US Federal minimum wage $7.25/hr × 173.33h"
+  },
+  "ar": {
+    "monthly_min_wage_local": 279744,
+    "currency": "ARS",
+    "source": "SMVM Argentina, Jan 2026"
+  },
+  "br": {
+    "monthly_min_wage_local": 1518,
+    "currency": "BRL",
+    "source": "Salário mínimo Brasil, Jan 2026"
+  },
+  "cl": {
+    "monthly_min_wage_local": 500000,
+    "currency": "CLP",
+    "source": "Ingreso mínimo Chile, Jan 2026"
+  },
+  "co": {
+    "monthly_min_wage_local": 1423500,
+    "currency": "COP",
+    "source": "Salario mínimo Colombia, Jan 2026"
+  },
+  "cr": {
+    "monthly_min_wage_local": 415000,
+    "currency": "CRC",
+    "source": "Salario mínimo Costa Rica (trabajador no calificado), Jan 2026"
+  },
+  "kz": {
+    "monthly_min_wage_local": 85000,
+    "currency": "KZT",
+    "source": "Минимальная зарплата Казахстан, Jan 2026"
+  },
+  "mx": {
+    "monthly_min_wage_local": 7508,
+    "currency": "MXN",
+    "source": "Salario mínimo México $278.80/day × 26.94 days, Jan 2026"
+  },
+  "pa": {
+    "monthly_min_wage_local": 520,
+    "currency": "USD",
+    "source": "Salario mínimo Panamá (sector general), Jan 2026"
+  },
+  "pe": {
+    "monthly_min_wage_local": 1025,
+    "currency": "PEN",
+    "source": "Remuneración Mínima Vital Perú, Jan 2026"
+  },
+  "uy": {
+    "monthly_min_wage_local": 28000,
+    "currency": "UYU",
+    "source": "Salario mínimo Uruguay, Jan 2026"
+  }
+}

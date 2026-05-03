@@ -1,10 +1,49 @@
-# Database files (local only)
-database/*.db
+# Secrets & local config
 .env
+config.json
+
+# Database local files
+database/*.db
+
+# Generated article outputs
+output/
+
+# Generated video outputs
+youtube_shorts/out/
+youtube_shorts/*/out/
+*.mp4
+
+# Generated audio & script outputs
+youtube_shorts/voice/*.mp3
+youtube_shorts/voice/voice_script*.txt
+
+# Generated YouTube description outputs
+youtube_shorts/description/out/
+
+# Remotion runtime data (populated by fetch_*.py before each render)
+youtube_shorts/*/public/data.json
+youtube_shorts/*/public/stat_data.json
+
+# Article GIF outputs & manifests
+article_gifs/*/out/
+article_gifs/out/
+*.gif
+
+# Article GIF runtime data
+article_gifs/*/public/data.json
+
+# npm dependencies (all sub-projects)
+**/node_modules/
 
 # Python
 __pycache__/
 *.py[cod]
-.env
+*.egg-info/
 venv/
 .venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~

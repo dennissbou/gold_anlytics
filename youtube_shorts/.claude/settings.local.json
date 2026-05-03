@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const d = require\\(''./public/data.json''\\); console.log\\(''date:'', d.date, ''| change:'', d.change_pct+''%'', ''| candles:'', d.candles.length, ''| open:'', d.open_price, ''| close:'', d.close_price\\)\")"
+    ]
+  }
+}

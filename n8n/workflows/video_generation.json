@@ -1,0 +1,154 @@
+{
+  "name": "video_generator",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Generate Gold Video",
+        "formDescription": "Enter the trading day to generate the YouTube Short for.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Day",
+              "placeholder": "YYYY-MM-DD",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aa134373-bd0d-4f5c-b490-97b0f56cef74",
+      "name": "Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [2256, -288],
+      "webhookId": "6a9abef2-a75d-47e2-b3fc-d957f44eb143"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "assign-day",
+              "name": "day",
+              "value": "={{ $json.Day }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d52ef208-438e-4d88-aca8-7199a046d2cd",
+      "name": "Set Day",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2496, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://fetcher-api:8000/shorts/render/rolling-candles/{{ $('Set Day').first().json.day }}",
+        "options": { "timeout": 600000 }
+      },
+      "id": "1c2f1d3c-bd80-4d4f-b425-400f76731829",
+      "name": "render-rolling-candles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2736, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://fetcher-api:8000/shorts/render/correlated-assets/{{ $('Set Day').first().json.day }}",
+        "options": { "timeout": 600000 }
+      },
+      "id": "65590d25-6c7d-4977-835c-132f29ee474b",
+      "name": "render-correlated-assets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2976, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://fetcher-api:8000/shorts/render/technical-indicators/{{ $('Set Day').first().json.day }}",
+        "options": { "timeout": 600000 }
+      },
+      "id": "8b09bc87-0228-46ed-b84c-ab442d1d4270",
+      "name": "render-technical-indicators",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3216, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/shorts/assemble",
+        "options": { "timeout": 120000 }
+      },
+      "id": "29642c89-9d94-44e9-b42e-3c004746316e",
+      "name": "assemble",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3440, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/shorts/voice",
+        "options": { "timeout": 120000 }
+      },
+      "id": "f2a3b4c5-d6e7-8901-fabc-012345678902",
+      "name": "voice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3632, -288]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/shorts/description",
+        "options": { "timeout": 60000 }
+      },
+      "id": "7a5f86c9-759b-40e4-8668-bcede7d90274",
+      "name": "description",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3824, -288]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Form Trigger": {
+      "main": [[{ "node": "Set Day", "type": "main", "index": 0 }]]
+    },
+    "Set Day": {
+      "main": [[{ "node": "render-rolling-candles", "type": "main", "index": 0 }]]
+    },
+    "render-rolling-candles": {
+      "main": [[{ "node": "render-correlated-assets", "type": "main", "index": 0 }]]
+    },
+    "render-correlated-assets": {
+      "main": [[{ "node": "render-technical-indicators", "type": "main", "index": 0 }]]
+    },
+    "render-technical-indicators": {
+      "main": [[{ "node": "assemble", "type": "main", "index": 0 }]]
+    },
+    "assemble": {
+      "main": [[{ "node": "voice", "type": "main", "index": 0 }]]
+    },
+    "voice": {
+      "main": [[{ "node": "description", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f926b09d-69c6-4252-a3bc-aa534054315b",
+  "meta": {
+    "instanceId": "abc8e493198af039150af22111aafd7cefb4c5271fb2a3454c3997c74feb62b5"
+  },
+  "id": "RTLvsxDWg8u5N0Hm",
+  "tags": []
+}

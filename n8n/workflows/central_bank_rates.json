@@ -1,0 +1,55 @@
+{
+  "name": "central_bank_rates",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1f2e3d4-c5b6-4789-a0b1-c2d3e4f56789",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fetcher-api:8000/fetch/locale/central-bank-rates",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "d4e5f6a7-b8c9-4234-de56-ef78ab901234",
+      "name": "locale-central-bank-rates",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        240
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "locale-central-bank-rates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "instanceId": "abc8e493198af039150af22111aafd7cefb4c5271fb2a3454c3997c74feb62b5"
+  },
+  "tags": []
+}

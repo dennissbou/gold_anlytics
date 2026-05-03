@@ -21,13 +21,18 @@ A generated article containing:
 
 ## Data Sources
 
-| Source | Description |
-|--------|-------------|
-| Historical gold prices | OHLCV data for XAU/USD |
-| Recent price updates | Last week / last day price movements |
-| Economic news | Latest news that impacts gold (USD strength, inflation, geopolitics, Fed decisions) |
-| Economic calendar | Upcoming scheduled events (CPI, NFP, FOMC, etc.) |
-| Correlated instruments | DXY (Dollar Index), US10Y (bonds), oil, silver, S&P 500 |
+| Source | Description | Priority |
+|--------|-------------|----------|
+| Historical gold prices | OHLCV data for XAU/USD (90–180 days daily) | Critical |
+| Recent price updates | Last week / last day price movements | Critical |
+| Correlated instruments | DXY, US10Y yield, WTI Oil, Silver (XAG/USD), S&P 500, VIX | Critical |
+| Economic news | Last 7 days of gold-relevant headlines (USD strength, inflation, geopolitics, Fed) | Critical |
+| Economic calendar | Upcoming high-impact events: CPI, NFP, FOMC, GDP, PPI, Treasury auctions | Critical |
+| Fed / rates context | Current Fed funds rate, last FOMC statement, rate expectations (CME FedWatch) | High |
+| Central bank activity | Gold reserve buying/selling by major central banks (China, India, etc.) | High |
+| COT report | CFTC Commitments of Traders — speculative net longs/shorts in gold futures (weekly) | Medium |
+| Gold ETF flows | Weekly inflows/outflows for GLD and IAU ETFs | Medium |
+| News sentiment score | Bullish/Bearish/Neutral score derived from recent gold-related news | Medium |
 
 ---
 
@@ -57,19 +62,25 @@ A generated article containing:
 ## Pipeline Steps — Detail
 
 ### Step 1: Data Collection
-- Price data: Fetch from API (e.g., Alpha Vantage, MetalPriceAPI, yfinance, or broker API)
-- News: Scrape or use NewsAPI / financial news APIs (Bloomberg, Reuters, Investing.com)
-- Economic calendar: Scrape Forex Factory, Investing.com calendar, or use an API
-- Correlated assets: DXY, US10Y yield, WTI Oil, Silver (XAG/USD), S&P 500
+- **Price data:** XAU/USD daily OHLCV (90–180d) via yfinance / MetalPriceAPI / Alpha Vantage
+- **Correlated assets:** DXY, US10Y yield, WTI Oil, Silver (XAG/USD), S&P 500, VIX — via yfinance
+- **Economic news:** Last 7 days of gold-relevant headlines via NewsAPI / web scraping (Reuters, Bloomberg, Investing.com)
+- **Economic calendar:** Next 7–10 days, high-impact events — Forex Factory scraper / Investing.com API
+- **Fed/rates context:** Current Fed funds rate + FOMC statement summary; CME FedWatch for rate probabilities
+- **Central bank gold activity:** World Gold Council reports or manual/scraped data (monthly cadence)
+- **COT report:** CFTC weekly data (Gold Futures, non-commercial net positioning) — CFTC website or Quandl
+- **ETF flows:** GLD / IAU weekly flow data — ETF provider websites or financial data APIs
 
 ### Step 2: Storage
-- Database: PostgreSQL or SQLite
-- Tables: prices, news, economic_events, correlated_assets
+- Database: PostgreSQL
+- Tables: `prices`, `correlated_prices`, `news`, `economic_events`, `cot_data`, `etf_flows`, `fed_context`, `generated_articles`
 
 ### Step 3: Analysis
-- Technical: Moving averages, RSI, MACD, Bollinger Bands, key S/R levels
-- Fundamental: Summarize relevant news, upcoming event risk
-- Sentiment: Bullish / Bearish / Neutral score from news
+- **Technical:** SMA 20/50/200, RSI 14, MACD, Bollinger Bands, ATR, key S/R levels (swing highs/lows)
+- **Fundamental:** Summarize relevant news, assess upcoming event risk (CPI/NFP/FOMC weight)
+- **Sentiment:** Bullish / Bearish / Neutral score from news headlines (keyword-based or LLM-scored)
+- **Macro/positioning:** COT net speculative positioning trend, ETF flow direction, Fed rate trajectory
+- **Correlation check:** DXY vs gold divergence/convergence, US10Y vs gold relationship current state
 
 ### Step 4: Content Generation
 - Use Claude API (or OpenAI) to generate the article
@@ -84,9 +95,13 @@ A generated article containing:
 |-----------|----------------|
 | Language | Python |
 | Price data | yfinance / MetalPriceAPI / Alpha Vantage |
-| News | NewsAPI / web scraping (BeautifulSoup) |
+| Correlated assets | yfinance (DXY, US10Y, Oil, Silver, SPX, VIX) |
+| News | NewsAPI / web scraping (BeautifulSoup, Reuters, Investing.com) |
 | Economic calendar | Forex Factory scraper / Investing.com API |
-| Database | PostgreSQL (or SQLite for MVP) |
+| COT data | CFTC website scraper / Quandl / nasdaq-data-link |
+| ETF flows | GLD/IAU provider pages scraper or financial API |
+| Fed/rates data | CME FedWatch scraper / FRED API (Federal Reserve Economic Data) |
+| Database | PostgreSQL |
 | Analysis | pandas, ta-lib, numpy |
 | AI generation | Claude API (claude-sonnet-4-6) |
 | Scheduling | cron job / APScheduler |
@@ -96,12 +111,16 @@ A generated article containing:
 
 ## MVP Scope
 
-1. Fetch XAU/USD daily prices (last 30 days)
-2. Pull top 5 recent gold-related news headlines
-3. Get next week's economic events (high-impact)
-4. Run basic technical analysis (trend + RSI + key levels)
-5. Generate a structured article using Claude API
-6. Save article as Markdown file ready for publishing
+1. Fetch XAU/USD daily prices (last 90 days)
+2. Fetch correlated assets: DXY, US10Y, Silver, Oil, S&P 500 (last 90 days)
+3. Pull top 5–10 recent gold-related news headlines + basic sentiment score
+4. Get next week's economic events (high-impact: CPI, NFP, FOMC)
+5. Fetch current Fed funds rate and last FOMC decision summary
+6. Run technical analysis (SMA 20/50/200, RSI, MACD, key S/R levels)
+7. Generate a structured article using Claude API
+8. Save article as Markdown file ready for publishing
+
+> COT data and ETF flows are post-MVP — useful but harder to source reliably.
 
 ---
 
@@ -112,3 +131,7 @@ A generated article containing:
 - Multi-language article output
 - Performance tracking (compare predictions vs actual price)
 - Web dashboard to review and approve articles before publishing
+
+DB_HOST=127.0.0.1                                                            DB_PORT=5432                                                            
+DB_NAME=gold_analytics                                                       DB_USER=postgres                                                        
+DB_PASSWORD=gold_price    
