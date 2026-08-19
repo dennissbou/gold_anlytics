@@ -71,7 +71,60 @@ DATE_DISP = {
 # model — same reasoning as ensure_disclaimer()/normalize_faq() in
 # analyzer/article_postprocess.py. The date stamp is what guarantees uniqueness,
 # so it is the one part never dropped to save length.
-SEO_TITLE_LIMIT = 60
+#
+# 2026-08-19: raised 60 -> 75 and the tail is now *trimmed* to fit rather than
+# accepted-or-discarded whole. At 60 the ES/RU head+stamp already ran 46-50
+# chars, so `len(base) + 3 + len(tail) <= limit` was never true and every
+# article in a locale ended up as "<locale constant>, <date>" -- byte-unique but
+# semantically identical. Google indexed a sample of each locale's set and left
+# the rest as "Crawled - currently not indexed" (66 articles in the 2026-08-19
+# GSC audit, all published before the 2026-07-18 fixes). The tail is the only
+# part of the H1 that says what the article is actually about, so it is worth
+# more than the display-truncation the 60-char cap was protecting.
+SEO_TITLE_LIMIT = 75
+
+# A trimmed tail must not end on a function word. _DANGLING covers the head
+# trim; this is the wider set used for tails, where a mid-phrase cut is likelier.
+_TAIL_STOP_EXTRA = {
+    'an', 'are', 'is', 'this', 'that', 'from', 'into', 'amid', 'amidst', 'meets',
+    'off', 'over', 'under', 'than', 'its', 'but',
+    'unos', 'unas', 'como', 'pese', 'mientras', 'sobre', 'entre', 'tras', 'hacia',
+    'desde', 'hasta', 'cuando', 'que', 'se', 'al',
+    'dos', 'das', 'nos', 'nas', 'enquanto', 'sem', 'ao', 'aos', 'pelo', 'pela',
+    'во', 'со', 'как', 'что', 'чем', 'под', 'над', 'без', 'после', 'через',
+    'к', 'у', 'об', 'же', 'ли', 'их', 'его', 'ее', 'это', 'этот', 'эта',
+}
+
+MIN_TAIL = 14                      # a shorter tail says nothing; drop it instead
+
+# The year in the stamp, dropped to buy room for the tail when it will not fit.
+# The day+month still separates articles inside a locale, and the tail now
+# carries the topic, so uniqueness does not depend on the year.
+_STAMP_YEAR = re.compile(r'(,\s*(?:\d{1,2}\s+\S+|\S+\s+\d{1,2},))\s+20\d\d$')
+
+
+def _trim_tail(tail, room):
+    """Longest prefix of `tail` that fits `room` and reads as a finished phrase."""
+    if len(tail) <= room:
+        return tail
+    cut = tail[:room + 1]
+    for sep in (': ', ' — ', ' - ', '; ', ', '):     # prefer a clause boundary
+        if sep in cut:
+            clause = cut.split(sep)[0].strip()
+            if len(clause) >= MIN_TAIL:
+                return clause
+    if ' ' not in cut:
+        return ''           # the tail's first word alone overruns the budget
+    cut = cut.rsplit(' ', 1)[0]
+    while cut:
+        cut = cut.rstrip(' ,-—:;¿¡')
+        last = cut.rsplit(' ', 1)[-1].lower().strip("«»\"'()")
+        if len(last) <= 2 or last in _DANGLING or last in _TAIL_STOP_EXTRA:
+            cut = cut.rsplit(' ', 1)[0] if ' ' in cut else ''
+            continue
+        break
+    return cut
+
 
 _SEO_MON = {
     'en': ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
@@ -152,8 +205,18 @@ def build_seo_title(title: str, date_iso: str, lg: str, cc: str = '',
                 base = f"{cut}, {stamp}"
         # else: head is already minimal — an over-length unique title beats a
         # short duplicate one, so the stamp stays.
-    if tail and len(base) + 3 + len(tail) <= limit:
-        base = f"{base} — {tail}"
+    # The tail is what distinguishes one article from the next inside a locale,
+    # so it is trimmed to fit rather than dropped. If it still will not fit,
+    # the stamp's year goes first -- a title without a topic is the failure
+    # mode this whole function exists to avoid.
+    if tail and ' — ' not in base:
+        for candidate in (base, _STAMP_YEAR.sub(r'\1', base)):
+            room = limit - len(candidate) - 3
+            if room < MIN_TAIL:
+                continue
+            fitted = _trim_tail(tail, room)
+            if len(fitted) >= MIN_TAIL:
+                return f"{candidate} — {fitted}"
     return base
 
 
